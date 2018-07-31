@@ -1,0 +1,3 @@
+[submodule "src-c/isl_termbox"]
+	path = src-c/isl_termbox
+	url = git@github.com:iskolbin/isl_termbox

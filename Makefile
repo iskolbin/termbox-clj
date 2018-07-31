@@ -1,0 +1,40 @@
+.PHONY: run clean
+
+JNI_DIR=target/jni
+CLASS_DIR=target/classes
+CLASS_NAME=Termbox
+CLASS_FILE=$(CLASS_DIR)/$(CLASS_NAME).class
+JAR_FILE=target/termbox-standalone.jar
+LIB_FILE=$(JNI_DIR)/libtermbox.so
+JAVA_FILE=src-java/Termbox.java
+C_FILE=src-c/Termbox.c
+C_HEADER=$(JNI_DIR)/Termbox.h
+INCLUDE_DIRS=$(shell find $(JAVA_HOME)/include -type d)
+INCLUDE_ARGS=$(INCLUDE_DIRS:%=-I%) -I$(JNI_DIR)
+
+run: $(LIB_FILE) $(JAR_FILE)
+	java -jar $(JAR_FILE)
+
+jar: $(JAR_FILE)
+
+$(JAR_FILE): $(CLASS_FILE) $(C_HEADER)
+	lein uberjar
+
+$(CLASS_FILE): $(JAVA_FILE)
+	lein javac
+
+header: $(C_HEADER)
+
+$(C_HEADER): $(CLASS_FILE)
+	mkdir -p $(JNI_DIR)
+	cd src-java && javah -o ../$(C_HEADER) $(CLASS_NAME)
+	@touch $(C_HEADER)
+
+lib: $(LIB_FILE)
+
+$(LIB_FILE): $(C_FILE) $(C_HEADER)
+	$(CC) $(INCLUDE_ARGS) -shared $(C_FILE) -o $(LIB_FILE) -fPIC
+
+clean:
+	lein clean
+	rm -rf $(JNI_DIR)
