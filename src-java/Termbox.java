@@ -114,9 +114,16 @@ public class Termbox {
 	public final static int CYAN     = 0x07;
 	public final static int WHITE    = 0x08;
 
-	public final static int WRAP_CROP    = 0;
-	public final static int WRAP_NEWLINE = 1;
-	public final static int WRAP_CYCLE   = 2;
+	public static int rgb(short red, short green, short blue, int mode) {
+		switch (mode) {
+			case OUTPUT_216:
+				return red * 36 + green * 6 + blue;
+			case OUTPUT_256:
+				return red * 36 + green * 6 + blue + 0x10;
+			default:
+				return 0;
+		}
+	}
 
 	public static native void init();
 	public static native void shutdown();
@@ -128,7 +135,7 @@ public class Termbox {
 	public static native int getTextColor(int x, int y);
 	public static native int getBackColor(int x, int y);
 	public static native void setCell(int x, int y, char character, int textColor, int backColor);
-	public static native void setCells(int x, int y, String string, int textColor, int backColor, int wrapMode);
+	public static native void setCells(int x, int y, String string, int textColor, int backColor);
 	public static native void setCharacter(int x, int y, char character);
 	public static native void setTextColor(int x, int y, int textColor);
 	public static native void setBackColor(int x, int y, int backColor);

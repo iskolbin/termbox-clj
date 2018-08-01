@@ -103,9 +103,9 @@ JNIEXPORT void JNICALL Java_Termbox_setCell(JNIEnv *env, jclass cls, jint x, jin
 /*
  * Class:     Termbox
  * Method:    setCells
- * Signature: (IILjava/lang/String;III)V
+ * Signature: (IILjava/lang/String;II)V
  */
-JNIEXPORT void JNICALL Java_Termbox_setCells(JNIEnv *env, jclass cls, jint x, jint y, jstring str, jint fg, jint bg, jint wrap) {
+JNIEXPORT void JNICALL Java_Termbox_setCells(JNIEnv *env, jclass cls, jint x, jint y, jstring str, jint fg, jint bg) {
 	int len = 0;
 	const char *native_str = (*env)->GetStringUTFChars(env, str, 0);
 	const char *nstr = native_str;
